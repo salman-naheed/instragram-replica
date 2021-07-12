@@ -1,14 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import React, {Component} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native'
-import {createStackNavigator} from '@react-navigation/stack'
+import { StatusBar } from "expo-status-bar";
+import React, { Component } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import LandingScreen from './components/auth/Landing';
-import { Register } from './components/auth/Register';
-import { Login } from './components/auth/Login';
+import LandingScreen from "./components/auth/Landing";
+import { Register } from "./components/auth/Register";
+import { Login } from "./components/auth/Login";
 
-import firebase from 'firebase/app'
+import firebase from "firebase/app";
 const firebaseConfig = {
   apiKey: "AIzaSyA40UEwNpJjDKR7lgHD6z0qjuswKMw46Mw",
   authDomain: "insta-dev-e5a8b.firebaseapp.com",
@@ -16,56 +16,67 @@ const firebaseConfig = {
   storageBucket: "insta-dev-e5a8b.appspot.com",
   messagingSenderId: "62564337856",
   appId: "1:62564337856:web:690a4cda0fe8a000b98525",
-  measurementId: "G-XF4M48M73P"
+  measurementId: "G-XF4M48M73P",
 };
-if(!firebase.apps.length){
-  firebase.initializeApp(firebaseConfig)
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
 }
 
 const Stack = createStackNavigator();
 
-export class App extends Component{
-  constructor(props){
+export class App extends Component {
+  constructor(props) {
     super(props);
     this.state = {
-      loaded: false
-    }
+      loaded: false,
+    };
   }
-  componentDidMount(){
+  componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
-      if(!user){
-        this.state = {
+      if (!user) {
+        this.setState ({
           loggedIn: false,
           loaded: true,
-        }
-      }else{
-        this.state = {
+        })
+      } else {
+        this.setState ({
           loggedIn: true,
           loaded: true,
-        }
+        })
       }
-    })
+    });
   }
-  render(){
-    const { loggedIn, loaded} = this.state;
-    if(!loaded){
-      return(
-        <View>
-          <Text>
-            Loading
-          </Text>
+  render() {
+    const { loggedIn, loaded } = this.state;
+    if (!loaded) {
+      return (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text>Loading</Text>
         </View>
-      )
+      );
+    }
+  
+  if(!loggedIn) {
+      return (
+        <NavigationContainer>
+          <Stack.Navigator initialRouterName="Landing">
+            <Stack.Screen
+              name="Landing"
+              component={LandingScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Login" component={Login} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
     }
     return (
-      <NavigationContainer>
-      <Stack.Navigator initialRouterName="Landing">
-        <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false}} />
-        <Stack.Screen name="Register" component={Register}/>
-        <Stack.Screen name="Login" component={Login}/>
-      </Stack.Navigator>
-      </NavigationContainer>
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <Text>User is logged in</Text>
+      </View>
     );
   }
 }
 
+export default App;
