@@ -8,11 +8,12 @@ import LandingScreen from "./components/auth/Landing";
 import { Register } from "./components/auth/Register";
 import { Login } from "./components/auth/Login";
 import Main from "./components/Main.";
+import Add from "./components/main/Add";
 
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from 'redux';
-import rootReducer from './redux/reducers'
-import thunk from 'redux-thunk'
+import { createStore, applyMiddleware } from "redux";
+import rootReducer from "./redux/reducers";
+import thunk from "redux-thunk";
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 import firebase from "firebase/app";
@@ -41,15 +42,15 @@ export class App extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (!user) {
-        this.setState ({
+        this.setState({
           loggedIn: false,
           loaded: true,
-        })
+        });
       } else {
-        this.setState ({
+        this.setState({
           loggedIn: true,
           loaded: true,
-        })
+        });
       }
     });
   }
@@ -62,8 +63,8 @@ export class App extends Component {
         </View>
       );
     }
-  
-  if(!loggedIn) {
+
+    if (!loggedIn) {
       return (
         <NavigationContainer>
           <Stack.Navigator initialRouterName="Landing">
@@ -80,7 +81,19 @@ export class App extends Component {
     }
     return (
       <Provider store={store}>
-      <Main/>
+      <NavigationContainer>
+        <Stack.Navigator initialRouterName="Main">
+          <Stack.Screen
+            name="Main"
+            component={Main}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Add"
+            component={Add}
+          />
+        </Stack.Navigator>
+        </NavigationContainer>
       </Provider>
     );
   }
