@@ -17,6 +17,7 @@ import thunk from "redux-thunk";
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 import firebase from "firebase/app";
+import Save from "./components/main/Save";
 const firebaseConfig = {
   apiKey: "AIzaSyA40UEwNpJjDKR7lgHD6z0qjuswKMw46Mw",
   authDomain: "insta-dev-e5a8b.firebaseapp.com",
@@ -91,6 +92,11 @@ export class App extends Component {
           <Stack.Screen
             name="Add"
             component={Add}
+            navigation={this.props.navigation}
+          />
+          <Stack.Screen
+            name="Save"
+            component={Save}
           />
         </Stack.Navigator>
         </NavigationContainer>
