@@ -9,7 +9,7 @@ import FeedScreen from "./main/Feed";
 import ProfileScreen from "./main/Profile";
 import AddScreen from "./main/Add";
 import SearchScreen from "./main/Search";
-
+import firebase from "firebase";
 const EmptyScreen = () => {
   return null;
 };
@@ -61,6 +61,12 @@ export class Main extends Component {
         <Tab.Screen
           name="Profile"
           component={ProfileScreen}
+          listeners={({ navigation }) => ({
+            tabPress: (event) => {
+              event.preventDefault();
+              navigation.navigate("Profile", {uid: firebase.auth().currentUser.uid});
+            },
+          })}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
