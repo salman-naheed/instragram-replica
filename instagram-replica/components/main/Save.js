@@ -6,7 +6,6 @@ require("firebase/firestore");
 require("firebase/firebase-storage");
 
 export default function Save(props) {
-  console.log("props", props.route.params.image);
   const [caption, setCaption] = useState("");
 
   const uploadImage = async () => {
@@ -16,19 +15,13 @@ export default function Save(props) {
     const childPath = `post/${
       firebase.auth().currentUser.uid
     }/${Math.random().toString(36)}`;
-    console.log("childPath", childPath);
     const task = firebase.storage().ref().child(childPath).put(blob);
 
-    const taskProgress = snapshot => {
-      console.log(`transferred: ${snapshot.bytesTransferred}`);
-    };
+    const taskProgress = (snapshot) => {};
 
-    const taskCompleted =() => {
-        console.log('at taskCompleted outer');
-    task.snapshot.ref.getDownloadURL().then((snapshot) => {
-        console.log('at taskCompleted inner');
+    const taskCompleted = () => {
+      task.snapshot.ref.getDownloadURL().then((snapshot) => {
         savePostData(snapshot);
-        console.log(snapshot);
       });
     };
 
@@ -37,7 +30,7 @@ export default function Save(props) {
     };
 
     task.on("state_changed", taskProgress, taskError, taskCompleted);
-  }
+  };
 
   const savePostData = (downloadURL) => {
     firebase
@@ -53,7 +46,7 @@ export default function Save(props) {
       .then(function () {
         props.navigation.popToTop();
       });
-  }
+  };
   return (
     <View style={{ flex: 1 }}>
       <TextInput
