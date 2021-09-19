@@ -10,7 +10,6 @@ function Profile(props) {
 
   useEffect(() => {
     const { currentUser, posts } = props;
-    console.log({ currentUser, posts });
     if (props?.route?.params?.uid === firebase.auth().currentUser.uid) {
       setUser(currentUser);
       setUserPosts(posts);
@@ -44,7 +43,6 @@ function Profile(props) {
         });
     }
     if (props?.following.indexOf(props?.route?.params?.uid) > -1) {
-      console.log("if");
       setFollowing(true);
     } else {
       setFollowing(false);
@@ -70,8 +68,9 @@ function Profile(props) {
       .doc(props.route.params.uid)
       .delete();
   };
-  if (user === null) {
-    return <View />;
+
+  const onLogout = () => {
+    firebase.auth().signOut();
   }
 
   return (
@@ -79,7 +78,7 @@ function Profile(props) {
       <View style={styles.infoContainer}>
         <Text>{user?.name}</Text>
         <Text>{user?.email}</Text>
-        {props?.route?.params !== firebase.auth().currentUser.uid ? (
+        {props.route.params.uid !== firebase.auth().currentUser.uid ? (
           <View>
             {following ? (
               <Button title="following" onPress={() => onUnfollow()} />
@@ -87,7 +86,9 @@ function Profile(props) {
               <Button title="follow" onPress={() => onFollow()} />
             )}
           </View>
-        ) : null}
+        ) :
+        <Button title="Logout" onPress={() => onLogout()} />
+        }
       </View>
       <View style={styles.containerGallery}>
         <FlatList

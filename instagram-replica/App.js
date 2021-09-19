@@ -9,6 +9,7 @@ import { Register } from "./components/auth/Register";
 import { Login } from "./components/auth/Login";
 import Main from "./components/Main.";
 import Add from "./components/main/Add";
+import Comment from './components/main/Comment';
 
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
@@ -97,6 +98,11 @@ export class App extends Component {
           <Stack.Screen
             name="Save"
             component={Save}
+            navigation={this.props.navigation}
+          />
+          <Stack.Screen
+            name="Comment"
+            component={Comment}
             navigation={this.props.navigation}
           />
         </Stack.Navigator>
